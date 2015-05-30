@@ -1498,11 +1498,11 @@ Connection dbConnection = null;
 					
 					//while2 starts(지역 선택한 경우 그다음 조건 선택하는 loop)
 					while(true){
-						System.out.println("다음 검색 조건을 입력하시오:");
-						System.out.println("1. 예약 가능 및 개장 및 마감 시간");
-						System.out.println("2. 배달 가능 지역");
-						System.out.println("3. 주요 고객층");
-						System.out.println("4. 좌석");
+						System.out.println("Choose the next condition of searching: ");
+						System.out.println("1. Working hours");
+						System.out.println("2. Delivery");
+						System.out.println("3. Major client");
+						System.out.println("4. Seat");
 						int t= scanner.nextInt();
 
 						if(t==1){
@@ -1522,7 +1522,7 @@ Connection dbConnection = null;
 							break;
 						}
 						else
-							System.out.println("insert 1 or 2 or 3 or 4 again.\n");
+							System.out.println("Insert 1 or 2 or 3 or 4 again.\n");
 
 					}//while2 ends
 
@@ -1539,11 +1539,11 @@ Connection dbConnection = null;
 				
 //					//while2 starts(지역 선택한 경우 그다음 조건 선택하는 loop)
 					while(true){
-						System.out.println("다음 검색 조건을 입력하시오:");
-						System.out.println("1. 할인");
-						System.out.println("2. 가격");
-						System.out.println("3. 음료");
-						System.out.println("4. 메뉴 별점");
+						System.out.println("Choose the next condition of searching: ");
+						System.out.println("1. The way of discount");
+						System.out.println("2. Price");
+						System.out.println("3. Beverage");
+						//System.out.println("4. 메뉴 별점");
 						int t= scanner.nextInt();
 						
 						//수정수정 
@@ -1559,13 +1559,13 @@ Connection dbConnection = null;
 							userInput.getPayment(category);
 							break;
 						}
-						else if(t==4){
-							userInput.getPayment(category);
-							break;
-						}
+						//else if(t==4){
+						//	userInput.getPayment(category);
+						//	break;
+						//}
 						
 						else
-							System.out.println("insert 1~4 again.\n");
+							System.out.println("Insert 1~3 again.\n");
 					}//while2 ends
 
 				}
@@ -1589,10 +1589,10 @@ Connection dbConnection = null;
 					
 					//while11 starts(매니저모드를 선택한후 테이블 수정하기)
 					while(true){
-						System.out.println("수정할 메뉴를 선택하세요:");
-						System.out.println("1. 메뉴 평가 수정하기");
-						System.out.println("2. 식당 삭제");
-						System.out.println("3. 추가");
+						System.out.println("Which section do you want to manage: ");
+						System.out.println(“1. Modify menu evaluation");
+						System.out.println(“2. Delete restaurant");
+						System.out.println(“3. Insert delivery location");
 						int c= scanner.nextInt();
 						
 						if(c==1){
@@ -1609,7 +1609,7 @@ Connection dbConnection = null;
 						}
 						
 	
-							System.out.println("insert 1 or 2 again.\n");
+							System.out.println("Insert 1 or 2 again.\n");
 							
 
 					}//while11 ends
