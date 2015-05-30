@@ -24,11 +24,11 @@ public class RestaurantDBinput{
 			customerormanager = scanner.nextInt();
 
 			if(customerormanager == 1){
-				System.out.println(“You choose Customer mode.");
+				System.out.println("You choose Customer mode.");
 				break;
 			}
 			else if(customerormanager == 2){
-				System.out.println(“You choose Manger mode.");
+				System.out.println("You choose Manger mode.");
 				break;		
 			}
 		}
@@ -45,23 +45,24 @@ public class RestaurantDBinput{
 		int locationorcategory;
 
 		while(true){
-			System.out.println("\n\n\nstart searching with 1. restaurant's location 2. food's category (enter 1 or 2)");
-			System.out.println("(or enter 3 if you want exit the program)");
+			System.out.println("\n\n\nStart searching with 1. restaurant's location 2. food's category (enter 1 or 2)");
+			System.out.println("(or enter 3 if you want to exit the program)");
 			locationorcategory =scanner.nextInt();
 
 			if(locationorcategory==1){
-				System.out.println("you selected restaurant's location.\n");
+				System.out.println("You select restaurant's location.\n");
 				break;
 			}
 
 			else if(locationorcategory==2){
-				System.out.println("you selected  food's category.");
-				System.out.println("어느 카테고리의 음식을 찾고싶습니까?(enter Korean or ...)");
+				System.out.println("You select  food's category.");
+				//System.out.println("Which food’s category do you want to find?(enter Korean or ...)");
+				//이거 필요해? 중복일꺼같은데??
 				break;
 			}
 
 			else if(locationorcategory==3){
-				System.out.println("=====program ended. BYE!=====");
+				System.out.println("=====Program ended. BYE!=====");
 				break;
 			}
 
@@ -85,24 +86,24 @@ public class RestaurantDBinput{
 		String location="";
 
 		while(true){
-			System.out.println("어느 지역의 식당을 찾고싶습니까?");
+			System.out.println("Which restaurant’s location do you prefer?");
 			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (enter 1 or 2 or 3)");
 			locationNum =scanner.nextInt();
 
 			if(locationNum==1){
-				System.out.println("you selected Ewha.\n");
+				System.out.println("You select Ewha.\n");
 				location="Ewha";
 				break;
 			}
 
 			else if(locationNum==2){
-				System.out.println("you selected Shinchon.\n");
+				System.out.println("You select Shinchon.\n");
 				location="Shinchon";
 				break;
 			}
 
 			else if(locationNum==3){
-				System.out.println("you selected Hongdae.\n");
+				System.out.println("You select Hongdae.\n");
 				location="Hongdae";
 				break;
 			}
@@ -133,7 +134,7 @@ public class RestaurantDBinput{
 		ArrayList<String> names = getRestaurantByReservation(opening, closing, location);
 
 
-		System.out.println("restaurants which open between "+opening+" and "+closing+": ");
+		System.out.println("Restaurants which open at "+opening+" and close at "+closing+": ");
 
 
 		for (int i = 0; i < names.size(); i++) {
@@ -239,24 +240,24 @@ public class RestaurantDBinput{
 		String restlocation;
 
 		while(true){
-			System.out.println("\n어느 지역으로 배달 가능한가 알아보고 싶습니까?");
+			System.out.println("\nWhich location do you want to get delivery?");
 			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (enter 1 or 2 or 3)");
 			locationNum =scanner.nextInt();
 
 			if(locationNum==1){
-				System.out.println("you selected Ewha.\n");
+				System.out.println("You select Ewha.\n");
 				restlocation="Ewha";
 				break;
 			}
 
 			else if(locationNum==2){
-				System.out.println("you selected Shinchon.\n");
+				System.out.println("You select Shinchon.\n");
 				restlocation="Shinchon";
 				break;
 			}
 
 			else if(locationNum==3){
-				System.out.println("you selected Hongdae.\n");
+				System.out.println("You select Hongdae.\n");
 				restlocation="Hongdae";
 				break;
 			}
@@ -353,9 +354,9 @@ public class RestaurantDBinput{
 
 		while(true){
 
-			System.out.println("\n어느 좌석에 앉고 싶습니까?");
+			System.out.println("\nWhich seats do you prefer");
 
-			System.out.println("1. Single 2. Double 3. Quad (enter 1 or 2 or 3)");
+			System.out.println("1. Single 2. Double 3. Quad (enter 1 or 2 or 3)\n");
 
 			seatNUM =scanner.nextInt();
 
@@ -363,7 +364,7 @@ public class RestaurantDBinput{
 
 			if(seatNUM==1){
 
-				System.out.println("you selected Single.\n");
+				System.out.println("You select Single.\n");
 
 				seat="Single";
 
@@ -375,7 +376,7 @@ public class RestaurantDBinput{
 
 			else if(seatNUM==2){
 
-				System.out.println("you selected Double.\n");
+				System.out.println("You select Double.\n");
 
 				seat="Double";
 
@@ -387,7 +388,7 @@ public class RestaurantDBinput{
 
 			else if(seatNUM==3){
 
-				System.out.println("you selected Quad.\n");
+				System.out.println("You select Quad.\n");
 
 				seat="Quad";
 
@@ -485,14 +486,6 @@ public class RestaurantDBinput{
 
 			dbConnection = dbdb.getDBConnection();
 
-
-
-
-
-
-
-
-
 			stmt = dbConnection.createStatement();
 
 			//use database
@@ -503,17 +496,7 @@ public class RestaurantDBinput{
 
 			System.out.println("USE DATABASE done…");
 
-
-
-
-
-
-
-
-
 			dbConnection.setAutoCommit(false);
-
-
 
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 
@@ -579,40 +562,40 @@ public class RestaurantDBinput{
 		String category="";
 
 		while(true){
-			//System.out.println("어느 카테고리의 식당을 찾으시겠습니까?");
+			//System.out.println("Which food’s category do you want to find?");
 			System.out.println("1.Korean  2.Chinese 3.Japanese 4.Indian 5.Fastfood 6.Western (enter 1~6)");
 			categoryNum =scanner.nextInt();
 
 			if(categoryNum==1){
-				System.out.println("you selected Korean.\n");
+				System.out.println("You select Korean.\n");
 				category="Korean";
 				break;
 			}
 
 			else if(categoryNum==2){
-				System.out.println("you selected Chinese.\n");
+				System.out.println("You select Chinese.\n");
 				category="Chinese";
 				break;
 			}
 
 			else if(categoryNum==3){
-				System.out.println("you selected Japanese.\n");
+				System.out.println("You select Japanese.\n");
 				category="Japanese";
 				break;
 			}
 			else if(categoryNum==4){
-				System.out.println("you selected Indian.\n");
+				System.out.println("You select Indian.\n");
 				category="Indian";
 				break;
 			}
 
 			else if(categoryNum==5){
-				System.out.println("you selected Fastfood.\n");
+				System.out.println("You select Fastfood.\n");
 				category="Fastfood";
 				break;
 			}
 			else if(categoryNum==6){
-				System.out.println("you selected Western.\n");
+				System.out.println("You select Western.\n");
 				category="Western";
 				break;
 			}
@@ -632,28 +615,28 @@ public class RestaurantDBinput{
 		String payment="";
 
 		while(true){
-			System.out.println("할인방식을 선택하세요");
-			System.out.println("1.coupon only  2. tele_discount only 3.coupon&tele_discount 4.None (enter 1~4)");
+			System.out.println("Choose a way of discount: ");
+			System.out.println(“1. Coupon only  2. Tele_discount only 3. Coupon&tele_discount 4. None (enter 1~4)");
 			paymentNum =scanner.nextInt();
 
 			if(paymentNum==1){
-				System.out.println("you selected coupon only.\n");
+				System.out.println("You select coupon only.\n");
 				payment="coupon";
 				break;
 			}
 
 			else if(paymentNum==2){
-				System.out.println("you selected tele_discount only.\n");
+				System.out.println("You select tele_discount only.\n");
 				payment="tele_discount";
 				break;
 			}
 			else if(paymentNum==3){
-				System.out.println("you selected coupon&tele_discount.\n");
+				System.out.println("You select coupon&tele_discount.\n");
 				payment="coupon&tele_discount";
 				break;
 			}
 			else if(paymentNum==4){
-				System.out.println("you selected None.\n");
+				System.out.println("You select None.\n");
 				payment="None";
 				break;
 			}
@@ -663,7 +646,7 @@ public class RestaurantDBinput{
 
 		ArrayList<String>names=getRestaurantByPayment(category,payment);
 
-		//System.out.println("restaurants which offer"+payment+"discount:");
+		//System.out.println("Restaurants which offer "+payment+"discount: ");
 
 		for (int i = 0; i < names.size(); i++) {
 			System.out.println(names.get(i));
@@ -770,9 +753,9 @@ public class RestaurantDBinput{
 
 		while(true){
 
-			System.out.println("\n원하는 가격대를 선택하세요");
+			System.out.println("\nChoose the price: ");
 
-			System.out.println("1. 10000원 이하 2. 10000원 이상 (enter 1 or 2)");
+			System.out.println("1. Less than 10000 2. Greater than 10000 (enter 1 or 2)");
 
 			priceNum =scanner.nextInt();
 
@@ -780,7 +763,7 @@ public class RestaurantDBinput{
 
 			if(priceNum==1){
 
-				System.out.println("you selected less than 10000.\n");
+				System.out.println("You select less than 10000.\n");
 
 				price="up";
 
@@ -792,7 +775,7 @@ public class RestaurantDBinput{
 
 			else if(priceNum==2){
 
-				System.out.println("you selected greater than 10000.\n");
+				System.out.println("You select greater than 10000.\n");
 
 				price="down";
 
@@ -910,10 +893,6 @@ public class RestaurantDBinput{
 
 			preparedStatementSelect.setString(1, category);
 
-
-
-
-
 			rs = preparedStatementSelect.executeQuery();
 
 
@@ -960,10 +939,10 @@ public class RestaurantDBinput{
 
 		//while start(get input until correct input is entered)
 		while(true){
-			System.out.println("\nInput age(among 10, 20, 30, 40): ");
+			System.out.println("\nInput age (among 10, 20, 30, 40): ");
 
 			age = scanner.nextInt();
-			System.out.println("Input gender(among F or M): ");
+			System.out.println("Input gender (among F or M): ");
 			gender = scanner.next();
 
 			//제대로된 input일 경우 loop 나감
@@ -985,12 +964,12 @@ public class RestaurantDBinput{
 		//성별을 완성된 단어로 저장하는 string
 		String genderLetter;
 		if(gender.equals("M")){
-			genderLetter="남성";               
+			genderLetter="Man";               
 		}
 		else
-			genderLetter="여성";
+			genderLetter="Female";
 
-		System.out.println(age+"대 혹은 "+genderLetter+"이 주요 연령층인 식당의 이름: ");
+		System.out.println(“Restaurants which people who is near "+age+" or "+genderLetter+" like : ");
 		System.out.println("[Restaurant name]	[Age]	[Gender]");
 
 
@@ -1102,7 +1081,7 @@ public class RestaurantDBinput{
 		//while start(get input until correct input is entered)
 		while(true){
 			//알콜음료 선택
-			System.out.println("\n원하는 알콜 음료를 선택하시오(번호입력)");
+			System.out.println("\nChoose alcohol beverages do you want: (enter 1~7)”);
 			System.out.println("1. Makgeolli");
 			System.out.println("2. Japanese_Rice_Wine");
 			System.out.println("3. Whiskey");
@@ -1123,7 +1102,7 @@ public class RestaurantDBinput{
 		//while2 starts
 		while(true){
 			//무알콜음료 선택
-			System.out.println("\n원하는 무알콜 음료를 선택하시오(번호입력)");
+			System.out.println("\nChoose non-alcohol beverage do you want: (enter 1~7)”);
 			System.out.println("1. Ssanghwa_tea");
 			System.out.println("2. Green_tea");
 			System.out.println("3. Lassi");
@@ -1203,7 +1182,7 @@ public class RestaurantDBinput{
 
 
 
-		System.out.println("알콜음료 "+alcohol+" 혹은 무알콜 음료 "+non_alcohol+"가 있는 식당이름은 ");
+		System.out.println("Restaurant which has alcohol beverage "+alcohol+" or non-alcohol beverage  "+non_alcohol+" : ");
 		System.out.println("[Restaurant name]	[alcohol]		[non_alcohol]");
 
 		ArrayList<DrinkName> names =  getDrinkName(category, alcohol, non_alcohol);
@@ -1311,26 +1290,22 @@ public class RestaurantDBinput{
 		int salty=0;
 		int sourness=0;
 
-		System.out.println("\n수정할 메뉴를 고르세요");
+		System.out.println("\nPick menu that you want to modify evaluation: ");
 		menuName = scanner.next();
 
-		System.out.println("\n you choose "+ menuName);
+		System.out.println("\n You choose "+ menuName);
 
-		System.out.println("점수를 입력하세요 (0~5)");
+		System.out.println("Input the grade (0~5)");
 		System.out.print("Spicy: ");
 		spicy = scanner.nextInt();
-		System.out.print("Sweetness: ");
+		System.out.print(" Sweetness: ");
 		sweetness = scanner.nextInt();
 
-		System.out.print("salty: ");
+		System.out.print(" salty: ");
 		salty = scanner.nextInt();
 
-		System.out.print("Sourness: ");
+		System.out.print(" Sourness: ");
 		sourness = scanner.nextInt();
-
-
-
-
 
 
 		getEditMenuEvalByMenu(menuName,spicy,sweetness,salty,sourness);
@@ -1385,77 +1360,13 @@ public class RestaurantDBinput{
 			}
 			
 			}//getEditMenuEvalByMenu ends
-
-	public void getUpdate() throws SQLException {
-
-		ArrayList<PrintUpdate> names = getUpdateByEdit();
-
-		for (int i = 0; i < names.size(); i++) {
-			System.out.println(names.get(i));
-		}//for ends
-
-	}//getPrice ends
-
-	public static ArrayList<PrintUpdate> getUpdateByEdit() throws SQLException {
-		
-		Connection dbConnection = null;
-		PreparedStatement preparedStatementSelect = null;
-		ResultSet rs = null;
-		ArrayList<PrintUpdate> update = new ArrayList<PrintUpdate>();
-		Statement stmt = null;
-
-
-		String selectTableSQL = "";
-
-		selectTableSQL = "SELECT restaurant_name, menu_name, spicy, sweetness, salty, sourness "
-				+ "FROM Menu_evaluation ";
-
-
-		try {
-			dbConnection = dbdb.getDBConnection();
-
-
-
-
-			stmt = dbConnection.createStatement();
-			//use database
-			String UseSQL = "USE RestaurantDB";
-			stmt.executeUpdate(UseSQL);
-			System.out.println("USE DATABASE done...");
-
-
-
-
-			dbConnection.setAutoCommit(false);
-
-			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
-			//	preparedStatementSelect.setInt(1, category);
-
-
-			rs = preparedStatementSelect.executeQuery();
-
-			while (rs.next()) {
-				update.add(new PrintUpdate(rs.getString("restaurant_name"), rs.getInt("spicy"), rs.getInt("sweetness"), rs.getInt("salty"), rs.getInt("sourness")));
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			dbConnection.rollback();
-		} finally {
-			if (preparedStatementSelect != null)
-				preparedStatementSelect.close();
-			if (dbConnection != null)
-				dbConnection.close();
-		}
-
-		return update;
-	}
 	
 	/*
 	    * 삭제할 식당의 이름을 받는 메소드
 	    * 입력값을 deleteRestaurant로 넘겨준다
 	    */
 	   public void getNameForDelete() throws SQLException{
-	      System.out.println("enter restaurant name to delete");
+	      System.out.println("Pick restaurant which do you want to delete: ");
 	      String nameToDelete=scanner.next();
 
 	      deleteRestaurant(nameToDelete);
@@ -1491,12 +1402,12 @@ public class RestaurantDBinput{
 	         preparedStatementDelete.setString(1, name);
 
 	         preparedStatementDelete.executeUpdate(); 
-	         System.out.println("restaurant "+name+" is deleted.");
+	         System.out.println("Restaurant "+name+" is deleted.");
 
 	      }
 
 	      catch(SQLException excp){
-	         System.out.println("error in deletion");
+	         System.out.println("Error in deletion");
 	      }
 
 
