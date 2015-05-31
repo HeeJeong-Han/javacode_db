@@ -1,5 +1,5 @@
-
-
+package KANGHANNAYOUNG;
+//사용자로부터 입력을 받아오는 클래스
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,43 +11,55 @@ import java.util.Scanner;
 
 
 public class RestaurantDBinput{
+	
+	//Test:사용자로부터 Configuration 파일과 SQL script의 정보를 읽어오는 클래스
 	static Test dbdb = new Test();
 	static Scanner scanner = new Scanner(System.in);
-
+	
+	//1215001 강린
 	/* Custom과 Manager 선택하는 Method*/
 	public int CustomerOrManager(){
+		//사용자가 실행 모드를 받아올 변수 선언
 		int customerormanager;
 
 		while(true){
-			System.out.println(" <<select mode: 1. Customer mode  2. Manager mode 3. Exit the program>>");
+			System.out.println(" <<Select mode: 1. Customer mode  2. Manager mode 3. Exit the program>>");
 			customerormanager = scanner.nextInt();
 
+			//Customer mode를 선택한경우 
 			if(customerormanager == 1){
 				System.out.println("You choose Customer mode.");
 				break;
 			}
+			
+			//Manager mode를 선택한경우 
 			else if(customerormanager == 2){
 				System.out.println("You choose Manager mode.");
 				break;		
 			}
+			
+			//Program 종료를 선택한 경우 
 			else if(customerormanager == 3){
 				System.out.println("=====program ended. BYE!=====");
 				break;
 			}
+			
 			else
-				System.out.println("<Warning> insert among 1, 2, 3 again.");
+				System.out.println("<Warning> Insert among 1, 2, 3 again.");
 			
 		}
+		
 		return customerormanager;
 	}
 
-	/*
+	/*1215001 강린
 	 * 지역과 카테고리 중 어느 것으로 검색을 시작할지 결정하는 method
 	 * 1과 2중 입력받은 하나를 return
 	 * 다른 것 입력받으면 1과 2중 하나 선택할 때까지 loop
-	 * 1-location, 2-category
+	 * 1-Location, 2-Category
 	 */
 	public int LocaionOrCategory(){
+		//사용자의 검색 옵션을 받아올 변수 선언
 		int locationorcategory;
 
 		while(true){
@@ -55,16 +67,19 @@ public class RestaurantDBinput{
 			System.out.println("(Insert 3 to exit Customer mode)");
 			locationorcategory =scanner.nextInt();
 
+			//지역을 선택한경우 
 			if(locationorcategory==1){
 				System.out.println("You choose restaurant's location.\n");
 				break;
 			}
 
+			//카테고리를 선택한경우 
 			else if(locationorcategory==2){
 				System.out.println("You choose food's category.");
 				break;
 			}
 
+			//Customer mode 종료를 선택한 경우 
 			else if(locationorcategory==3){
 				System.out.println("=====Customer mode ended=====");
 				break;
@@ -81,11 +96,13 @@ public class RestaurantDBinput{
 	}//ends LocationOrCategory method
 
 
-	/*
+	/*1215001 강린
 	 * 지역으로 검색을 시작할 경우 지역 설정
 	 * 해당 지역 return
 	 */
+	
 	public String getLocation(){
+		//사용자의 검색 옵션을 받아올 변수 선언
 		int locationNum;
 		String location="";
 
@@ -94,18 +111,21 @@ public class RestaurantDBinput{
 			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (Insert among 1, 2, 3)");
 			locationNum =scanner.nextInt();
 
+			//Ewha를 선택한 경우 
 			if(locationNum==1){
 				System.out.println("You selected Ewha.\n");
 				location="Ewha";
 				break;
 			}
 
+			//Shinchon을 선택한 경우 
 			else if(locationNum==2){
 				System.out.println("You selected Shinchon.\n");
 				location="Shinchon";
 				break;
 			}
 
+			//Hongdae를 선택한 경우 
 			else if(locationNum==3){
 				System.out.println("You selected Hongdae.\n");
 				location="Hongdae";
@@ -120,26 +140,31 @@ public class RestaurantDBinput{
 
 	}//getLocation method ends
 
-	/*
-	 * 예약 가능한 식당 중 사용자가 원하는 영업시간을 입력하는 메소드
+	/* 1215131 한희정
+	 * 식당 중 사용자가 원하는 영업시간을 입력하는 메소드
 	 * 식당의 지역을 파라미터로 받음
-	 * getRestaurantByReservation에 입력값 반환
+	 * getRestaurantByWorkinghour에 입력값 반환
 	 */
+	
 	public void getOpeningClosing(String restaurantLoc) throws SQLException {
-
+		
+		//사용자가 선택한 지역을 받을 변수 선언
+		String location = restaurantLoc;
+		
+		//사용자로부터 opening hour, closing hour값을 받음
 		System.out.println("\nInput maximum opening_hours: ");
 		int opening = scanner.nextInt();
 		System.out.println("Input minimum closing_hours: ");
 		int closing = scanner.nextInt();
 
-		String location = restaurantLoc;
+		//getRestaurantByWorkinghour(opening, closing, location)로부터 받은 식당이름을 ArrayList에 넣음
 
-
-		ArrayList<String> names = getRestaurantByReservation(opening, closing, location);
+		ArrayList<String> names = getRestaurantByWorkinghour(opening, closing, location);
 
 
 		System.out.println("Restaurants which open between "+opening+" and "+closing);
 
+		//검색조건을 만족하는 restaurant의 이름을 출력
 		System.out.println("[Restaurant name]");
 		for (int i = 0; i < names.size(); i++) {
 			if(names.size()==0)
@@ -153,20 +178,31 @@ public class RestaurantDBinput{
 
 
 
-	/*
-	 * 입력받은 개장 및 마감 시간에 해당하는 식당의 이름 반환하는 메소드
+	/* 1215131 한희정
+	 * getOpeningClosing으로 부터 opening,closing,location을 받아서
+	 * 입력받은 개장 및 마감 시간에 해당하는 restaurant의 이름 반환하는 메소드
 	 */
-	public static ArrayList<String> getRestaurantByReservation(int opening, int closing, String location) throws SQLException {
+	public static ArrayList<String> getRestaurantByWorkinghour(int opening, int closing, String location) throws SQLException {
+		/*
+		 * 데이터베이스와의 연결을 위한 Connection
+		 * SQL문을 수행하기 위한 PreparedStatement
+		 * select 쿼리의 결과값을 받기 위한 ResultSet
+		 * 
+		 * */
+		
+		
+		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatementSelect = null;
 		ResultSet rs = null;
+		
+		//restaurant의 이름을 받을 array list 선언
 		ArrayList<String> restaurant_name = new ArrayList<String>();
 
 		
 		Statement stmt = null;
 
-
-
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		String selectTableSQL="";
 		if(location=="Ewha"){
 			selectTableSQL = "SELECT restaurant_name "
@@ -200,6 +236,8 @@ public class RestaurantDBinput{
 
 
 		try {
+			
+			
 			dbConnection = dbdb.getDBConnection();
 
 
@@ -208,17 +246,20 @@ public class RestaurantDBinput{
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
-
+			
 
 			dbConnection.setAutoCommit(false);
 
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 			preparedStatementSelect.setInt(1, opening);
 			preparedStatementSelect.setInt(2, closing);
-
+			
+			
+			//select 쿼리문을 수행한 결과를 rs에 넣음
 			rs = preparedStatementSelect.executeQuery();
 
+			//select 쿼리문을 수행하여 나온 restaurant_name(결과값)을 restaurant_name arraylist에 넣음
 			while (rs.next()) {
 				restaurant_name.add(rs.getString("restaurant_name"));
 			}
@@ -236,32 +277,37 @@ public class RestaurantDBinput{
 	}//지역, 오픈, 마감 select ends
 
 
-	/*
+	/*1215131 한희정
 	 * 이미 선택한 지역에서 배달 가능한가 알아보는 지역 입력받는 메소드
 	 * 식당의 지역을 파라미터로 받음
 	 * getRestaurantByDelivery에 입력값과 식당의 지역 반환
 	 */
 	public void getDeliveryLocation(String restaurantLoc) throws SQLException{
+		//사용자가 선택한 배달지역의 번호를 받을 변수 선언
 		int locationNum;
+		//사용자가 선택한 지역을 받을 변수 선언
 		String restlocation;
 
 		while(true){
 			System.out.println("\nChoose the delivery location you want to check.");
 			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (Insert among 1, 2, 3)");
 			locationNum =scanner.nextInt();
-
+			
+			//Ewha를 선택한 경우
 			if(locationNum==1){
 				System.out.println("You choose Ewha.\n");
 				restlocation="Ewha";
 				break;
 			}
 
+			//Shinchon을 선택한 경우
 			else if(locationNum==2){
 				System.out.println("You choose Shinchon.\n");
 				restlocation="Shinchon";
 				break;
 			}
 
+			//Hongdae를 선택한 경우 
 			else if(locationNum==3){
 				System.out.println("You choose Hongdae.\n");
 				restlocation="Hongdae";
@@ -272,12 +318,13 @@ public class RestaurantDBinput{
 				System.out.println("<Warning> Insert among 1, 2, 3)");
 		}
 
-
+		//getRestaurantByDelivery(restaurantLoc,restlocation)로부터 받은 식당이름을 ArrayList에 넣음
 		ArrayList<String> names =getRestaurantByDelivery( restaurantLoc, restlocation);
-		System.out.println("next restaurants can deliver to "+restlocation);
+		
+		System.out.println("Next restaurants can deliver to "+restlocation);
 		System.out.println("[Restaurant location]");
 		
-		
+		//검색조건을 만족하는 restaurant의 이름을 출력
 		for(int i=0;i<names.size();i++){
 			if(names.size()==0)
 				System.out.println("NONE");
@@ -293,23 +340,31 @@ public class RestaurantDBinput{
 
 
 
-	/*
+	/*1215131 한희정
 	 * 입력받은 번호에 해당하는 지역에 배달 가능한 식당 이름 반환
 	 * 파라미터로 식당의 지역과 배달가능한지 알아보는 지역을 받음
 	 */
 	public static ArrayList<String> getRestaurantByDelivery(String restaurantLoc, String restlocation) throws SQLException{
 
-		//select query 입력
+		/*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement
+			 * select 쿼리의 결과값을 받기 위한 ResultSet
+			 * 
+			 * */
+		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatementSelect = null;
 		ResultSet rs = null;
+		
+		//restaurant의 이름을 받을 array list 선언
 		ArrayList<String> restaurant_name = new ArrayList<String>();
 
-		//지원
-		//예약가능하지 않은 식당도 보여주는 것으로 변경 
+
 		Statement stmt = null;
 
 
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		String selectTableSQL = "SELECT restaurant_name "
 				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 				+ "WHERE location= ? AND "
@@ -320,35 +375,36 @@ public class RestaurantDBinput{
 
 
 		try {
+			
 			dbConnection = dbdb.getDBConnection();
 
-
-
-			
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
-
-
-
+			
 
 			dbConnection.setAutoCommit(false);
-
+			
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 			preparedStatementSelect.setString(1, restaurantLoc);
 			preparedStatementSelect.setString(2, restaurantLoc);
 			preparedStatementSelect.setString(3, restlocation);
+			
 
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
 
+			//select 쿼리문을 수행하여 나온 restaurant_name(결과값)을 restaurant_name arraylist에 넣음
 			while (rs.next()) {
 				restaurant_name.add(rs.getString("restaurant_name"));
 			}
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			dbConnection.rollback();
+			
 		} finally {
 			if (preparedStatementSelect != null)
 				preparedStatementSelect.close();
@@ -359,9 +415,15 @@ public class RestaurantDBinput{
 		return restaurant_name;
 	}//getDeliveryAvailableLocation ends
 
+	/*1215131 한희정
+	 * 사용자가 사전에 선택한 지역에서 입력받은 좌석 종류에 해당하는 식당의 이름과 좌석수를 반환
+	 * 파라미터로 식당의 지역을 받음
+	 */
 	public void getSizeSeat(String restaurantLoc) throws SQLException {
-
+		
+		//좌석 종류를 받기 위한 변수 선언
 		int seatNUM;
+		//좌석 종류를 받기 위한 변수 선언
 		String seat;
 
 		while(true){
@@ -373,7 +435,7 @@ public class RestaurantDBinput{
 			seatNUM =scanner.nextInt();
 
 
-
+			//Single을 선택한 경우 
 			if(seatNUM==1){
 
 				System.out.println("You selected Single.\n");
@@ -385,7 +447,7 @@ public class RestaurantDBinput{
 			}
 
 
-
+			//Double을 선택한 경우
 			else if(seatNUM==2){
 
 				System.out.println("You selected Double.\n");
@@ -397,7 +459,7 @@ public class RestaurantDBinput{
 			}
 
 
-
+			//Quad를 선택한 경우 
 			else if(seatNUM==3){
 
 				System.out.println("You selected Quad.\n");
@@ -419,18 +481,20 @@ public class RestaurantDBinput{
 
 
 
+		//getRestaurantBySeat(restaurantLoc, seat)로부터 받은 출력결과를 ArrayList에 넣음
+		ArrayList<AvailableSeat> result = getRestaurantBySeat(restaurantLoc, seat);
 
-		ArrayList<AvailableSeat> names = getRestaurantBySeat(restaurantLoc, seat);
-
+		//출력형식
 		System.out.println("[Restaurant name]	[inside "+seat+" seat]	[outside "+seat+" seat]");
 		
 
-		for (int i = 0; i < names.size(); i++) {
-			if(names.size()==0)
+		//검색조건을 만족하는 restaurant의 이름과 좌석종류에 따른 좌석 수를 출력 
+		for (int i = 0; i < result.size(); i++) {
+			if(result.size()==0)
 				System.out.println("NONE");
 			else
 
-				System.out.println(names.get(i).toString());
+				System.out.println(result.get(i).toString());
 
 		}//for ends
 
@@ -438,24 +502,34 @@ public class RestaurantDBinput{
 
 	}//getOpeningClosing ends
 
+
+/*1215131 한희정
+	 * 입력받은 지역과 좌석 종류에 해당하는 식당의 이름과 좌석 종류에 따른 좌석 수 반환
+	 * 파라미터로 식당의 지역과 좌석종류를 받음
+	 */
+	
 	public static ArrayList<AvailableSeat> getRestaurantBySeat(String location, String seat) throws SQLException {
 
+
+		/*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement
+			 * select 쿼리의 결과값을 받기 위한 ResultSet
+			 * 
+			 * */
 		Connection dbConnection = null;
-
 		PreparedStatement preparedStatementSelect = null;
-
 		ResultSet rs = null;
-
+		
+		//결과값을 받을 array list 선언
 		ArrayList<AvailableSeat> availableSeat= new ArrayList<AvailableSeat>();
 
 
 		Statement stmt = null;
-
-
-
-
-
+		//Select 쿼리 문을 받을 String 선언
 		String selectTableSQL = "";
+		
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		if(seat=="Single"){
 
 			selectTableSQL = "SELECT restaurant_name, inside_single_seat, outside_single_seat "
@@ -502,14 +576,6 @@ public class RestaurantDBinput{
 
 			dbConnection = dbdb.getDBConnection();
 
-
-
-
-
-
-
-
-
 			stmt = dbConnection.createStatement();
 
 			//use database
@@ -518,29 +584,19 @@ public class RestaurantDBinput{
 
 			stmt.executeUpdate(UseSQL);
 
-			//System.out.println("USE DATABASE done…");
-
-
-
-
-
-
-
-
-
+			
 			dbConnection.setAutoCommit(false);
 
-
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
-
 			preparedStatementSelect.setString(1, location);
 
-
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
 
 
-
+			//select 쿼리문을 수행하여 나온 결과값을  arraylist에 넣음
 			while (rs.next()) {
 				if(seat=="Single"){
 
@@ -586,48 +642,63 @@ public class RestaurantDBinput{
 
 
 
-
-
-
 	//지역을 선택했을 경우의 메소드 끝
+
+
+	
 	//카테고리를 선택했을 경우의 메소드시작
+	
+
+
+	/*1215001 강린
+	 * 사용자로부터 식당의 카테고리를 입력받는 메소드
+	 */
 	public String getCategory(){
+		//사용자부터 카테고리를 받을 변수 선언
 		int categoryNum;
 		String category="";
 
 		while(true){
-			//System.out.println("Choose the category of the restaurant");
+			System.out.println("Choose the category of the restaurant");
 			System.out.println("1.Korean  2.Chinese 3.Japanese 4.Indian 5.Fastfood 6.Western (Insert 1~6)");
 			categoryNum =scanner.nextInt();
-
+			
+			//Korean을 선택한 경우
 			if(categoryNum==1){
 				System.out.println("You selected Korean.\n");
 				category="Korean";
 				break;
 			}
 
+			//Chinese를 선택한 경우
 			else if(categoryNum==2){
 				System.out.println("You selected Chinese.\n");
 				category="Chinese";
 				break;
 			}
-
+			
+			//Japanese를 선택한 경우
 			else if(categoryNum==3){
 				System.out.println("You selected Japanese.\n");
 				category="Japanese";
 				break;
 			}
+			
+			//Indian을 선택한 경우
 			else if(categoryNum==4){
 				System.out.println("You selected Indian.\n");
 				category="Indian";
 				break;
 			}
-
+			
+			//Fastfood를 선택한 경우 
 			else if(categoryNum==5){
 				System.out.println("You selected Fastfood.\n");
 				category="Fastfood";
 				break;
 			}
+			
+			//Western을 선택한 경우 
 			else if(categoryNum==6){
 				System.out.println("You selected Western.\n");
 				category="Western";
@@ -643,32 +714,45 @@ public class RestaurantDBinput{
 
 	}//getCategory method ends
 
+
+	/* 1215129
+	 * 식당 중 사용자가 원하는 할인 방식을 입력하는 메소드
+	 * 식당의 카테고리를 파라미터로 받음
+	 * getRestaurantByPayment에 입력값 반환
+	 */
 	public void getPayment(String category) throws SQLException{
 
+		//사용자로부터 할인 서비스를 받기 위한 변수 선언
 		int paymentNum;
 		String payment="";
 
 		while(true){
 			System.out.println("Choose the payment service ");
-			System.out.println("1.coupon only  2. tele_discount only 3.coupon&tele_discount 4.None (Insert 1~4)");
+			System.out.println("1.Coupon only  2. Tele_discount only 3.Coupon&Tele_discount 4.None (Insert 1~4)");
 			paymentNum =scanner.nextInt();
 
+			//Coupon only를 선택한 경우
 			if(paymentNum==1){
-				System.out.println("You selected coupon only.\n");
+				System.out.println("You selected Coupon only.\n");
 				payment="coupon";
 				break;
 			}
-
+			
+			//Tele_discount only를 선택한 경우
 			else if(paymentNum==2){
-				System.out.println("You selected tele_discount only.\n");
+				System.out.println("You selected Tele_discount only.\n");
 				payment="tele_discount";
 				break;
 			}
+			
+			//Coupon&Tele_discount를 선택한 경우
 			else if(paymentNum==3){
-				System.out.println("You selected coupon&tele_discount.\n");
+				System.out.println("You selected Coupon&Tele_discount.\n");
 				payment="coupon&tele_discount";
 				break;
 			}
+			
+			//None을 선택한 경우 
 			else if(paymentNum==4){
 				System.out.println("You selected None.\n");
 				payment="None";
@@ -677,12 +761,15 @@ public class RestaurantDBinput{
 			else
 				System.out.println("<Warning> Insert 1~4 again.\n");
 		}//while문 끝
-
+		
+		//결과값을 받을 array list 선언
 		ArrayList<String>names=getRestaurantByPayment(category,payment);
 
 		System.out.println("Restaurants which offer "+payment+" discount:");
+		//출력형식
 		System.out.println("[Restaurant name]");
 		
+		//검색조건을 만족하는 결과를 출력
 		for (int i = 0; i < names.size(); i++) {
 			if(names.size()==0)
 				System.out.println("NONE");
@@ -691,7 +778,19 @@ public class RestaurantDBinput{
 		}//for ends
 	}//getPayment method ends!
 
+	/*1215129 한나영 
+	 * 입력받은 카테고리에서 해당 하는 할인서비스가 가능한 식당 이름 반환
+	 * 파라미터로 식당의 카테고리, 할인 종류를 받음
+	 */
 	public static ArrayList<String> getRestaurantByPayment(String category,String payment) throws SQLException {
+
+		/*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement
+			 * select 쿼리의 결과값을 받기 위한 ResultSet
+			 * 
+			 * */
+		
 		Connection dbConnection = null;
 		PreparedStatement preparedStatementSelect = null;
 		ResultSet rs = null;
@@ -702,7 +801,11 @@ public class RestaurantDBinput{
 
 
 
+		//Select 쿼리 문을 받을 String 선언
 		String selectTableSQL="";
+		
+		//사용자의 입력 조건에 따른 Select Query문 작성
+
 		if(payment=="coupon"){
 			selectTableSQL = "SELECT restaurant_name "
 					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Payment "
@@ -758,19 +861,22 @@ public class RestaurantDBinput{
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
+	
 
 
 			dbConnection.setAutoCommit(false);
-
+			
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 			preparedStatementSelect.setString(1, category);
 
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
 
 			while (rs.next()) {
 				restaurant_name.add(rs.getString("restaurant_name"));
 			}
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			dbConnection.rollback();
@@ -783,9 +889,17 @@ public class RestaurantDBinput{
 
 		return restaurant_name;
 	}
+	
 
+
+	/* 1215129 한나영	
+	 * 식당 중 사용자가 원하는 가격대를 입력하는 메소드
+	 * 식당의 카테고리를 파라미터로 받음
+	 * getRestaurantByPrice에 입력값 반환
+	 */
 	public void getPrice(String category) throws SQLException {
-
+		
+		//사용자가 원하는 가격대를 입력받기 위한 변수 선언
 		int priceNum;
 		String price;
 
@@ -793,12 +907,12 @@ public class RestaurantDBinput{
 
 			System.out.println("\nChoose the price range");
 
-			System.out.println("1. under 10000won 2. over 10000won (Insert 1 or 2)");
+			System.out.println("1. Under 10000won 2. Over 10000won (Insert 1 or 2)");
 
 			priceNum =scanner.nextInt();
 
 
-
+			//Under 10000won을 선택한 경우
 			if(priceNum==1){
 
 				System.out.println("You selected under 10000won.\n");
@@ -810,7 +924,7 @@ public class RestaurantDBinput{
 			}
 
 
-
+			//Over 10000won을 선택한 경우 
 			else if(priceNum==2){
 
 				System.out.println("You selected over 10000won.\n");
@@ -832,18 +946,18 @@ public class RestaurantDBinput{
 
 
 
-
+		//getRestaurantByPrice(category, price)로부터 받은 식당이름을 ArrayList에 넣음				
 		ArrayList<PrintMenuName> names = getCategoryByPrice(category, price);
+		//출력형식
 		System.out.println("[Restaurant name]	[Menu name]");
-
-
-
+		
+		//검색조건을 만족하는 결과를 출력
 		for (int i = 0; i < names.size(); i++) {
 			if(names.size()==0)
 				System.out.println("NONE");
 			else
 
-			System.out.println(names.get(i).toString());
+				System.out.println(names.get(i).toString());
 
 		}//for ends
 
@@ -851,14 +965,23 @@ public class RestaurantDBinput{
 
 	}//getPrice ends
 
+	/*1215129 한나영
+	 * 입력받은 카테고리와 가격대에 해당하는 식당의 이름 반환
+	 * 파라미터로 식당의 카테고리와 가격대를 받음
+	 */
 	public static ArrayList<PrintMenuName> getCategoryByPrice(String category, String price) throws SQLException {
 
+		/*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement
+			 * select 쿼리의 결과값을 받기 위한 ResultSet
+			 * 
+			 * */
 		Connection dbConnection = null;
-
 		PreparedStatement preparedStatementSelect = null;
-
 		ResultSet rs = null;
-
+		
+		//결과값을 받을 array list 선언
 		ArrayList<PrintMenuName> restaurant_name = new ArrayList<PrintMenuName>();
 
 		Statement stmt = null;
@@ -866,8 +989,10 @@ public class RestaurantDBinput{
 
 
 
-
+		//Select 쿼리 문을 받을 String 선언
 		String selectTableSQL = "";
+		
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		if(price=="up"){
 			selectTableSQL = "SELECT restaurant_name, menu_name "
 
@@ -901,14 +1026,6 @@ public class RestaurantDBinput{
 
 			dbConnection = dbdb.getDBConnection();
 
-
-
-
-
-
-
-
-
 			stmt = dbConnection.createStatement();
 
 			//use database
@@ -917,31 +1034,19 @@ public class RestaurantDBinput{
 
 			stmt.executeUpdate(UseSQL);
 
-			//System.out.println("USE DATABASE done...");
-
-
-
-
-
-
-
-
 
 			dbConnection.setAutoCommit(false);
 
-
-
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 
 			preparedStatementSelect.setString(1, category);
 
-
-
-
-
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
 
 
+			//select 쿼리문을 수행하여 나온 결과값을 arraylist에 넣음
 
 			while (rs.next()) {
 
@@ -973,25 +1078,27 @@ public class RestaurantDBinput{
 
 	}
 
-	/*
+	/* 1215001 강린
 	 * 사용자가 원하는 연령대와 성별 입력받는 메소드
 	 * 식당의 지역을 파라미터로 받음
 	 *  getRestaurantByAgeGender 에 입력값과 식당 지역 반환
 	 */
 	public void getAgeGender(String restaurantLoc) throws SQLException{
+		
+		//사용자가 원하는 age와 gender값을 받기 위한 변수 선언
 		int age=0;
 		String gender = "";
+		
+		//사용자가 선택한 지역을 받는 변수 
 		String location = restaurantLoc;
 
-		//while start(get input until correct input is entered)
 		while(true){
 			System.out.println("\nChoose age(among 10, 20, 30, 40): ");
-
 			age = scanner.nextInt();
+			
 			System.out.println("Choose gender(among F or M): ");
 			gender = scanner.next();
 
-			//제대로된 input일 경우 loop 나감
 			if(age==10||age==20||age==30||age==40){
 				if(gender.equals("M")||gender.equals("F"))
 					break;               
@@ -1001,11 +1108,8 @@ public class RestaurantDBinput{
 				System.out.println("<Warning> Insert age among 10, 20, 30, 40 and gender among M, F");
 
 		}
-
-
-
-
-		ArrayList<AgeGenderName> names =  getRestaurantByAgeGender(age, gender, location);
+		//결과값을 받을 array list 선언
+		ArrayList<AgeGenderName> result =  getRestaurantByAgeGender(age, gender, location);
 
 		//성별을 완성된 단어로 저장하는 string
 		String genderLetter;
@@ -1015,35 +1119,45 @@ public class RestaurantDBinput{
 		else
 			genderLetter="Female";
 
+		//출력형식
 		System.out.println(age+" OR "+genderLetter+" is the major_client of these restaurant: ");
 		System.out.println("[Restaurant name]	[Age]	[Gender]");
 
 
-
-		for (int i = 0; i < names.size(); i++) {
-			if(names.size()==0)
+		//검색조건을 만족하는 결과를 출력
+		for (int i = 0; i < result.size(); i++) {
+			if(result.size()==0)
 				System.out.println("NONE");
 			else
-			System.out.println(names.get(i));
+			System.out.println(result.get(i));
 		}//for ends
 
 
 	}
 
+	/*1215001 강린
+	 * 입력받은 번호에 해당하는 지역의 Major client가 사용자가 입력한 age 혹은 gender인 식당 이름 반환
+	 * 파라미터로 식당의 지역과 age, gender값을 받음
+	 */		
 
 	public static ArrayList<AgeGenderName> getRestaurantByAgeGender(int age, String gender, String restaurantLoc) throws SQLException{
+		/*
+		 * 데이터베이스와의 연결을 위한 Connection
+		 * SQL문을 수행하기 위한 PreparedStatement
+		 * select 쿼리의 결과값을 받기 위한 ResultSet
+		 * 
+		 * */
 		Connection dbConnection = null;
 		PreparedStatement preparedStatementSelect = null;
 		ResultSet rs = null;
 		ArrayList<AgeGenderName> agegendername = new ArrayList<AgeGenderName>();
 
-		//지원
 		Statement stmt = null;
-
-
-
+		
+		//Select 쿼리 문을 받을 String 선언
 		String selectTableSQL="";
-
+		
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		selectTableSQL = "(SELECT restaurant_name, age, gender "
 				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Major_client "
 				+ "WHERE age = ? AND "
@@ -1071,29 +1185,27 @@ public class RestaurantDBinput{
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
-
-
+			
 			dbConnection.setAutoCommit(false);
+			
 
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 			preparedStatementSelect.setInt(1, age);
 			preparedStatementSelect.setString(2, restaurantLoc);
 			preparedStatementSelect.setString(3, gender);
 			preparedStatementSelect.setString(4, restaurantLoc);
 
-
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
+
+			//select 쿼리문을 수행하여 나온 결과값을 arraylist에 넣음
 
 			while (rs.next()) {
 
 				agegendername.add(new AgeGenderName(rs.getString("restaurant_name"),
 						rs.getInt("age"),
 						rs.getString("gender")));
-
-
-
-
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -1104,30 +1216,23 @@ public class RestaurantDBinput{
 			if (dbConnection != null)
 				dbConnection.close();
 		}
-
-
-
 		return agegendername;
 	}
-	/*
-	 * 사용자가 원하는 연령대와 성별 입력받는 메소드
-	 * 식당의 지역을 파라미터로 받음
-	 *  getRestaurantByAgeGender 에 입력값과 식당 지역 반환
-	 */
-
-	/*
+	
+	/*1215001 강린
 	 * 사용자가 원하는 (무)알콜 음료를 번호로 입력받는 메소드
 	 * 파라미터로 카테고리를 받는다
 	 * 카테고리와 음료 번호를 getDrinkName에 넘겨준다
 	 */
 	public static void getDrink(String category) throws SQLException{
+		//사용자가 원하는 (무)알콜 음료를 받기 위한 변수 선언
 		int alcoholNum = 0;
 		int non_alcoholNum= 0;
 		String alcohol="";
 		String non_alcohol="";
 
 
-		//while start(get input until correct input is entered)
+		//while 
 		while(true){
 			//알콜음료 선택
 			System.out.println("\nChoose alcohol drink you want (Insert the number)");
@@ -1148,7 +1253,7 @@ public class RestaurantDBinput{
 		}
 
 
-		//while2 starts
+		//while2 
 		while(true){
 			//무알콜음료 선택
 			System.out.println("\nChoose nonalcohol drink you want (Insert the number)");
@@ -1161,7 +1266,6 @@ public class RestaurantDBinput{
 			System.out.println("7. Ade");
 			non_alcoholNum=scanner.nextInt();
 
-			//알맞은 입력을 받은 경우 loop 나감
 			if(non_alcoholNum>=1&&non_alcoholNum<=7)
 				break;
 			else
@@ -1171,7 +1275,7 @@ public class RestaurantDBinput{
 
 
 
-		//switch startswhile
+		//switch 사용자가 원하는 음료종류값을 String으로 저장
 		switch(alcoholNum){
 		case 1: 
 			alcohol="Makgeolli";
@@ -1200,7 +1304,7 @@ public class RestaurantDBinput{
 
 
 
-		//switch starts
+		//switch 사용자가 원하는 음료종류값을 String으로 저장
 		switch(non_alcoholNum){
 		case 1: 
 			non_alcohol="Ssanghwa_tea";
@@ -1227,47 +1331,50 @@ public class RestaurantDBinput{
 			System.out.println("default");
 		}//switch ends
 
-
-
-
-
+		//출력형식
 		System.out.println("Alcohol drink "+alcohol+" or Nonalcohol drink "+non_alcohol+" is offered in these restaurant");
 		System.out.println("[Restaurant name]	[alcohol]		[non_alcohol]");
 
-		ArrayList<DrinkName> names =  getDrinkName(category, alcohol, non_alcohol);
+		//getDrinkName(category, alcohol, non_alcohol)로부터 받은 결과값을 ArrayList에 넣음
+		ArrayList<DrinkName> result =  getDrinkName(category, alcohol, non_alcohol);
 
-		
-
-
-
-
-		for (int i = 0; i < names.size(); i++) {
-			if(names.size()==0)
+		//검색조건을 만족하는 결과를 출력
+		for (int i = 0; i < result.size(); i++) {
+			if(result.size()==0)
 				System.out.println("NONE");
 			else
-			System.out.println(names.get(i));
+			System.out.println(result.get(i));
 		}//for ends
 	}//getDrink method ends
 
 
 
-	/*
+	/*1215001 강린
 	 * 카테고리와 알콜음료, 무알콜 음료를 파라미터로 받아 해당 음료가 있는 식당의 이름과 음료 종류 반환하는 메소드
 	 */
 
 	public static ArrayList<DrinkName> getDrinkName(String category_name, String alcohol, String non_alcohol) throws SQLException{
+
+		/*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement
+			 * select 쿼리의 결과값을 받기 위한 ResultSet
+			 * 
+			 * */
 		Connection dbConnection = null;
 		PreparedStatement preparedStatementSelect = null;
 		ResultSet rs = null;
+		
+		//결과값을 받을 array list 선언
 		ArrayList<DrinkName> drinkname = new ArrayList<DrinkName>();
 
 		
 		Statement stmt = null;
 
 
-
+		//Select 쿼리 문을 받을 String 선언
 		String selectTableSQL="";
-
+		//사용자의 입력 조건에 따른 Select Query문 작성
 		selectTableSQL = "(SELECT restaurant_name, alcohol_drink, nonalcohol_drink "
 				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Beverage "
 				+ "WHERE alcohol_drink = ? AND "
@@ -1281,7 +1388,7 @@ public class RestaurantDBinput{
 				+ "restaurant_name  IN ( SELECT restaurant_name "
 				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 				+ "WHERE category = ? )) ";
-		//쿼리입력
+		
 
 
 
@@ -1289,26 +1396,26 @@ public class RestaurantDBinput{
 			dbConnection = dbdb.getDBConnection();
 
 
-
-			//지원
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
+
 
 
 			dbConnection.setAutoCommit(false);
-
+			
+			//사용자로부터 입력받은 조건을 select 쿼리문에 대입
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 			preparedStatementSelect.setString(1, alcohol);
 			preparedStatementSelect.setString(2, category_name);
 			preparedStatementSelect.setString(3, non_alcohol);
 			preparedStatementSelect.setString(4, category_name);
 
-
+			//사용자의 입력 조건에 따른 Select Query문 수행
 			rs = preparedStatementSelect.executeQuery();
 
+			//select 쿼리문을 수행하여 나온 결과값을 arraylist에 넣음
 			while (rs.next()) {
 
 				drinkname.add(new DrinkName(rs.getString("restaurant_name"),
@@ -1327,14 +1434,19 @@ public class RestaurantDBinput{
 				dbConnection.close();
 		}
 
-
-
 		return drinkname;
 	}//getDrinkName method ends
+	
 
+	/*1215131 한희정
+	 * 입력받은 메뉴에 해당하는 메뉴의 메뉴평가를 수정하는 메소드 
+	 */
 	public void getEditMenuEval()throws SQLException {
 
+		//사용자로부터 메뉴 이름을 입력받기 위한 변수선언
 		String menuName;
+		
+		//사용자로부터 메뉴 평가 점수를 입력받기 위한 변수 선언
 		int spicy=0;
 		int sweetness=0;
 		int salty=0;
@@ -1346,8 +1458,10 @@ public class RestaurantDBinput{
 		System.out.println("\n you choose "+ menuName);
 
 		System.out.println("Insert the score (0~5)");
+		
 		System.out.print("Spicy: ");
 		spicy = scanner.nextInt();
+		
 		System.out.print("Sweetness: ");
 		sweetness = scanner.nextInt();
 
@@ -1356,24 +1470,29 @@ public class RestaurantDBinput{
 
 		System.out.print("Sourness: ");
 		sourness = scanner.nextInt();
-
-
-
-
-
-
+		
+		//getEditMenuEvalByMenu:메뉴 평가를 변경하는 메소드 
+		//사용자가 입력한 값으로 해당 메뉴의 메뉴 평가를 변경
 		getEditMenuEvalByMenu(menuName,spicy,sweetness,salty,sourness);
 
 	}//getEditMenuEval() ends
 
+	/*1215131 한희정
+	 * getEditMenuEval()로 부터 메뉴평가를 변경할 메뉴와 변경할 내용을 받아 
+	 * 해당 메뉴의 메뉴 평가를 변경하는 메소드
+	 * */
 	public static void getEditMenuEvalByMenu(String menuName, int spicy, int sweetness, int salty, int sourness) throws SQLException {
 		
-
+		/*
+		 * 데이터베이스와의 연결을 위한 Connection
+		 * SQL문을 수행하기 위한 PreparedStatement,Statement
+		 
+		 * */
 			Connection dbConnection = null;
-
 			PreparedStatement preparedStatementUpdate = null;
-
 			Statement stmt = null;
+			
+			//UPDATE쿼리문을 작성
 			String updateTableSQL = "UPDATE DBCOURSE_Menu_evaluation set spicy = ?, sweetness = ?, salty = ?, sourness = ? where menu_name = ?";
 
 			try {
@@ -1382,17 +1501,17 @@ public class RestaurantDBinput{
 				//use database
 				String UseSQL = "USE RestaurantDB";
 				stmt.executeUpdate(UseSQL);
-				//System.out.println("USE DATABASE done...");
-
+				
+				//사용자로부터 입력받은 조건을 UPDATE쿼리문에 대입
 				preparedStatementUpdate = dbConnection.prepareStatement(updateTableSQL);
 
-				
 				preparedStatementUpdate.setInt(1, spicy);				
 				preparedStatementUpdate.setInt(2, sweetness);				
 				preparedStatementUpdate.setInt(3, salty);				
 				preparedStatementUpdate.setInt(4, sourness);
 				preparedStatementUpdate.setString(5, menuName);
 				
+				//UPDATE쿼리문 수행
 				preparedStatementUpdate.executeUpdate();
 
 				System.out.println("Update Table!");
@@ -1414,72 +1533,9 @@ public class RestaurantDBinput{
 			}
 			
 			}//getEditMenuEvalByMenu ends
-
-	public void getUpdate() throws SQLException {
-
-		ArrayList<PrintUpdate> names = getUpdateByEdit();
-
-		for (int i = 0; i < names.size(); i++) {
-			System.out.println(names.get(i));
-		}//for ends
-
-	}//getPrice ends
-
-	public static ArrayList<PrintUpdate> getUpdateByEdit() throws SQLException {
-		
-		Connection dbConnection = null;
-		PreparedStatement preparedStatementSelect = null;
-		ResultSet rs = null;
-		ArrayList<PrintUpdate> update = new ArrayList<PrintUpdate>();
-		Statement stmt = null;
-
-
-		String selectTableSQL = "";
-
-		selectTableSQL = "SELECT restaurant_name, menu_name, spicy, sweetness, salty, sourness "
-				+ "FROM DBCOURSE_Menu_evaluation ";
-
-
-		try {
-			dbConnection = dbdb.getDBConnection();
-
-
-
-
-			stmt = dbConnection.createStatement();
-			//use database
-			String UseSQL = "USE RestaurantDB";
-			stmt.executeUpdate(UseSQL);
-			//System.out.println("USE DATABASE done...");
-
-
-
-
-			dbConnection.setAutoCommit(false);
-
-			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
-			//	preparedStatementSelect.setInt(1, category);
-
-
-			rs = preparedStatementSelect.executeQuery();
-
-			while (rs.next()) {
-				update.add(new PrintUpdate(rs.getString("restaurant_name"), rs.getInt("spicy"), rs.getInt("sweetness"), rs.getInt("salty"), rs.getInt("sourness")));
-			}
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			dbConnection.rollback();
-		} finally {
-			if (preparedStatementSelect != null)
-				preparedStatementSelect.close();
-			if (dbConnection != null)
-				dbConnection.close();
-		}
-
-		return update;
-	}
 	
-	/*
+	
+	/*1315002 강지원
 	    * 삭제할 식당의 이름을 받는 메소드
 	    * 입력값을 deleteRestaurant로 넘겨준다
 	    */
@@ -1494,15 +1550,22 @@ public class RestaurantDBinput{
 
 
 
-	   /*
+	   /*1315002 강지원
 	    * 파라미터로 받은 식당이름을 식당 테이블에서 삭제하는 메소드
 	    */
 	   public void deleteRestaurant(String name) throws SQLException{
-	      Test dbdb = new Test();
+		  //Test:사용자로부터 Configuration 파일과 SQL script의 정보를 읽어오는 클래스
+		   Test dbdb = new Test();
+		   /*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement,Statement
+			 * 
+			 * */
 	      PreparedStatement preparedStatementDelete = null;
 	      Connection dbConnection=null;
 	      Statement stmt = null;
-
+	      
+	    //DELETE 쿼리 문을 받을 String 
 	      String createStmt="DELETE from DBCOURSE_Restaurant WHERE restaurant_name= ? ";
 	      try{
 
@@ -1512,13 +1575,13 @@ public class RestaurantDBinput{
 	         //use database
 	         String UseSQL = "USE RestaurantDB";
 	         stmt.executeUpdate(UseSQL);
-	         // System.out.println("USE DATABASE done...");
+	         
 
-
-
+	       //사용자로부터 입력받은 조건을 DELETE 쿼리문에 대입
 	         preparedStatementDelete = dbConnection.prepareStatement(createStmt);
 	         preparedStatementDelete.setString(1, name);
-
+	         
+	       //DELETE 쿼리문 수행
 	         preparedStatementDelete.executeUpdate(); 
 	         System.out.println("restaurant "+name+" is deleted.");
 
@@ -1532,16 +1595,17 @@ public class RestaurantDBinput{
 
 	   }//deleteRestaurant method ends
 
-	   /*
-	    * 삭제할 식당의 이름을 받는 메소드
-	    * 입력값을 insertSize로 넘겨준다
+	   /*1315002 강지원
+	    * 추가할 지역의 이름을 받는 메소드
+	    * 입력값을 insertintoDeliveryLocation으로 넘겨준다
 	    */
 	   public void getLocationForInsert() throws SQLException{
 	      System.out.println("Enter Location to insert");
 	      String nameTolocation=scanner.next();
 	      System.out.println("Enter Delivery location to insert");
 	      String nameToDeliverylocation=scanner.next();
-	      
+	     
+	      //사용자로부터 입력받은 nameTolocation,nameToDeliverylocation 값을 이용해 intoDeliveryLocation 호출
 	      insertintoDeliveryLocation(nameTolocation, nameToDeliverylocation);
 
 
@@ -1549,15 +1613,23 @@ public class RestaurantDBinput{
 
 
 
-	   /*
+	   /*1315002 강지원
 	    * delivery location 추가하는 메소드
 	    */
 	   public void insertintoDeliveryLocation(String location, String delivery_location) throws SQLException{
-	      Test dbdb = new Test();
+	      //Test:사용자로부터 Configuration 파일과 SQL script의 정보를 읽어오는 클래스
+		   Test dbdb = new Test();
+		   
+		   /*
+			 * 데이터베이스와의 연결을 위한 Connection
+			 * SQL문을 수행하기 위한 PreparedStatement,Statement
+			 * 
+			 * */
 	      PreparedStatement preparedStatementInsert = null;
 	      Connection dbConnection=null;
 	      Statement stmt = null;
-
+	      
+	      //INSERT INTO 쿼리문 작성
 	      String insertStmt="INSERT INTO DBCOURSE_Delivery_location (location, delivery_location) values (?,?) ";
 	      try{
 
@@ -1567,14 +1639,14 @@ public class RestaurantDBinput{
 	         //use database
 	         String UseSQL = "USE RestaurantDB";
 	         stmt.executeUpdate(UseSQL);
-	         // System.out.println("USE DATABASE done…");
+	       
 
-
-
+	       //사용자로부터 입력받은 조건을 INSERT INTO 쿼리문에 대입
 	         preparedStatementInsert = dbConnection.prepareStatement(insertStmt);
 	         preparedStatementInsert.setString(1, location);
 	         preparedStatementInsert.setString(2, delivery_location);
 	         
+	         //INSERT INTO 쿼리문 수행
 	         preparedStatementInsert.executeUpdate(); 
 	         System.out.println("Location "+location+" is inserted and Delivery location "+delivery_location+" is inserted");
 
