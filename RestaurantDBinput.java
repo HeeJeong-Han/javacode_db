@@ -1,4 +1,3 @@
-package KANGHANNAYOUNG;
 
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 
 
 public class RestaurantDBinput{
-	static RestaurantDB dbdb = new RestaurantDB();
+	static Test dbdb = new Test();
 	static Scanner scanner = new Scanner(System.in);
 
 	/* Custom과 Manager 선택하는 Method*/
@@ -20,7 +19,7 @@ public class RestaurantDBinput{
 		int customerormanager;
 
 		while(true){
-			System.out.println("Choose 1. Customer mode or 2. Manager mode");
+			System.out.println(" <<select mode: 1. Customer mode  2. Manager mode 3. Exit the program>>");
 			customerormanager = scanner.nextInt();
 
 			if(customerormanager == 1){
@@ -28,9 +27,16 @@ public class RestaurantDBinput{
 				break;
 			}
 			else if(customerormanager == 2){
-				System.out.println("You choose Manger mode.");
+				System.out.println("You choose Manager mode.");
 				break;		
 			}
+			else if(customerormanager == 3){
+				System.out.println("=====program ended. BYE!=====");
+				break;
+			}
+			else
+				System.out.println("<Warning> insert among 1, 2, 3 again.");
+			
 		}
 		return customerormanager;
 	}
@@ -45,30 +51,28 @@ public class RestaurantDBinput{
 		int locationorcategory;
 
 		while(true){
-			System.out.println("\n\n\nStart searching with 1. restaurant's location 2. food's category (enter 1 or 2)");
-			System.out.println("(or enter 3 if you want to exit the program)");
+			System.out.println("\n\n\nStart searching with 1. restaurant's location 2. food's category (Insert 1 or 2)");
+			System.out.println("(Insert 3 to exit Customer mode)");
 			locationorcategory =scanner.nextInt();
 
 			if(locationorcategory==1){
-				System.out.println("You select restaurant's location.\n");
+				System.out.println("You choose restaurant's location.\n");
 				break;
 			}
 
 			else if(locationorcategory==2){
-				System.out.println("You select  food's category.");
-				//System.out.println("Which food’s category do you want to find?(enter Korean or ...)");
-				//이거 필요해? 중복일꺼같은데??
+				System.out.println("You choose food's category.");
 				break;
 			}
 
 			else if(locationorcategory==3){
-				System.out.println("=====Program ended. BYE!=====");
+				System.out.println("=====Customer mode ended=====");
 				break;
 			}
 
 
 			else
-				System.out.println("<Warning> insert 1 or 2 or 3 again.");
+				System.out.println("<Warning> Insert again among 1, 2, 3");
 		}
 
 
@@ -86,30 +90,30 @@ public class RestaurantDBinput{
 		String location="";
 
 		while(true){
-			System.out.println("Which restaurant’s location do you prefer?");
-			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (enter 1 or 2 or 3)");
+			System.out.println("Which location you want to search?");
+			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (Insert among 1, 2, 3)");
 			locationNum =scanner.nextInt();
 
 			if(locationNum==1){
-				System.out.println("You select Ewha.\n");
+				System.out.println("You selected Ewha.\n");
 				location="Ewha";
 				break;
 			}
 
 			else if(locationNum==2){
-				System.out.println("You select Shinchon.\n");
+				System.out.println("You selected Shinchon.\n");
 				location="Shinchon";
 				break;
 			}
 
 			else if(locationNum==3){
-				System.out.println("You select Hongdae.\n");
+				System.out.println("You selected Hongdae.\n");
 				location="Hongdae";
 				break;
 			}
 
 			else
-				System.out.println("<Warning> insert 1 or 2 or 3 again.\n");
+				System.out.println("<Warning> Insert again among 1, 2, 3.\n");
 		}
 
 		return location;
@@ -134,11 +138,14 @@ public class RestaurantDBinput{
 		ArrayList<String> names = getRestaurantByReservation(opening, closing, location);
 
 
-		System.out.println("Restaurants which open at "+opening+" and close at "+closing+": ");
+		System.out.println("Restaurants which open between "+opening+" and "+closing);
 
-
+		System.out.println("[Restaurant name]");
 		for (int i = 0; i < names.size(); i++) {
-			System.out.println(names.get(i));
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
+				System.out.println(names.get(i));
 		}//for ends
 
 
@@ -155,7 +162,7 @@ public class RestaurantDBinput{
 		ResultSet rs = null;
 		ArrayList<String> restaurant_name = new ArrayList<String>();
 
-		//지원
+		
 		Statement stmt = null;
 
 
@@ -163,29 +170,29 @@ public class RestaurantDBinput{
 		String selectTableSQL="";
 		if(location=="Ewha"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Working_hours NATURAL JOIN Service "
+					+ "FROM DBCOURSE_Working_hours NATURAL JOIN DBCOURSE_Service "
 					+ "WHERE opening <= ? AND closing >= ? AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM location_ewha)";
+					+ "FROM DBCOURSE_location_ewha)";
 
 		}
 
 
 		else if(location=="Shinchon"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Working_hours NATURAL JOIN Service "
-					+ "WHERE opening <= ? AND closing >= ? AND reservation = 'Y' AND "
+					+ "FROM DBCOURSE_Working_hours NATURAL JOIN DBCOURSE_Service "
+					+ "WHERE opening <= ? AND closing >= ? AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM location_shinchon)";
+					+ "FROM DBCOURSE_location_shinchon)";
 
 		}
 
 		else if(location=="Hongdae"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Working_hours NATURAL JOIN Service "
-					+ "WHERE opening <= ? AND closing >= ? AND reservation = 'Y' AND "
+					+ "FROM DBCOURSE_Working_hours NATURAL JOIN DBCOURSE_Service "
+					+ "WHERE opening <= ? AND closing >= ? AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM location_hongdae)";
+					+ "FROM DBCOURSE_location_hongdae)";
 		}
 
 
@@ -197,7 +204,6 @@ public class RestaurantDBinput{
 
 
 
-			//지원
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
@@ -240,37 +246,43 @@ public class RestaurantDBinput{
 		String restlocation;
 
 		while(true){
-			System.out.println("\nWhich location do you want to get delivery?");
-			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (enter 1 or 2 or 3)");
+			System.out.println("\nChoose the delivery location you want to check.");
+			System.out.println("1. Ewha 2. Shinchon 3. Hongdae (Insert among 1, 2, 3)");
 			locationNum =scanner.nextInt();
 
 			if(locationNum==1){
-				System.out.println("You select Ewha.\n");
+				System.out.println("You choose Ewha.\n");
 				restlocation="Ewha";
 				break;
 			}
 
 			else if(locationNum==2){
-				System.out.println("You select Shinchon.\n");
+				System.out.println("You choose Shinchon.\n");
 				restlocation="Shinchon";
 				break;
 			}
 
 			else if(locationNum==3){
-				System.out.println("You select Hongdae.\n");
+				System.out.println("You choose Hongdae.\n");
 				restlocation="Hongdae";
 				break;
 			}
 
 			else
-				System.out.println("<Warning> insert 1 or 2 or 3 again.");
+				System.out.println("<Warning> Insert among 1, 2, 3)");
 		}
 
 
 		ArrayList<String> names =getRestaurantByDelivery( restaurantLoc, restlocation);
-
+		System.out.println("next restaurants can deliver to "+restlocation);
+		System.out.println("[Restaurant location]");
+		
+		
 		for(int i=0;i<names.size();i++){
-			System.out.println(names.get(i));
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
+				System.out.println(names.get(i));
 
 		}
 	}//ends getDeliveryLocation
@@ -299,11 +311,11 @@ public class RestaurantDBinput{
 
 
 		String selectTableSQL = "SELECT restaurant_name "
-				+ "FROM Restaurant NATURAL JOIN Location "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 				+ "WHERE location= ? AND "
 				+"exists"
 				+"(SELECT location "
-				+ "FROM Delivery_location "
+				+ "FROM DBCOURSE_Delivery_location "
 				+ "WHERE location = ? AND delivery_location = ?)";
 
 
@@ -312,12 +324,12 @@ public class RestaurantDBinput{
 
 
 
-			//지원
+			
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
 			stmt.executeUpdate(UseSQL);
-			System.out.println("USE DATABASE done...");
+			//System.out.println("USE DATABASE done...");
 
 
 
@@ -354,9 +366,9 @@ public class RestaurantDBinput{
 
 		while(true){
 
-			System.out.println("\nWhich seats do you prefer");
+			System.out.println("\nWhich seat do you want to sit?");
 
-			System.out.println("1. Single 2. Double 3. Quad (enter 1 or 2 or 3)\n");
+			System.out.println("1. Single 2. Double 3. Quad (Insert 1 or 2 or 3)");
 
 			seatNUM =scanner.nextInt();
 
@@ -364,7 +376,7 @@ public class RestaurantDBinput{
 
 			if(seatNUM==1){
 
-				System.out.println("You select Single.\n");
+				System.out.println("You selected Single.\n");
 
 				seat="Single";
 
@@ -376,7 +388,7 @@ public class RestaurantDBinput{
 
 			else if(seatNUM==2){
 
-				System.out.println("You select Double.\n");
+				System.out.println("You selected Double.\n");
 
 				seat="Double";
 
@@ -388,7 +400,7 @@ public class RestaurantDBinput{
 
 			else if(seatNUM==3){
 
-				System.out.println("You select Quad.\n");
+				System.out.println("You selected Quad.\n");
 
 				seat="Quad";
 
@@ -400,7 +412,7 @@ public class RestaurantDBinput{
 
 			else
 
-				System.out.println("<Warning> insert 1 or 2 or 3 again.");
+				System.out.println("<Warning> Insert 1 or 2 or 3 again.");
 
 		}
 
@@ -410,11 +422,15 @@ public class RestaurantDBinput{
 
 		ArrayList<AvailableSeat> names = getRestaurantBySeat(restaurantLoc, seat);
 
-
+		System.out.println("[Restaurant name]	[inside "+seat+" seat]	[outside "+seat+" seat]");
+		
 
 		for (int i = 0; i < names.size(); i++) {
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
 
-			System.out.println(names.get(i).toString());
+				System.out.println(names.get(i).toString());
 
 		}//for ends
 
@@ -442,26 +458,26 @@ public class RestaurantDBinput{
 		String selectTableSQL = "";
 		if(seat=="Single"){
 
-			selectTableSQL = "SELECT restaurant_name, Seat_available.inside_single_seat, Seat_available.outside_single_seat "
+			selectTableSQL = "SELECT restaurant_name, inside_single_seat, outside_single_seat "
 
-					+ "FROM Restaurant NATURAL JOIN Seat_available "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_seat_available "
 
 					+ "WHERE restaurant_name IN (SELECT restaurant_name "
 
-					+ "FROM Restaurant, Location "
+					+ "FROM DBCOURSE_Restaurant, DBCOURSE_Location "
 
-					+ "WHERE Restaurant.address = Location.address AND Location.location = ?)";
+					+ "WHERE DBCOURSE_Restaurant.address = DBCOURSE_Location.address AND DBCOURSE_Location.location = ?)";
 		}
 
 		else if(seat == "Double"){
 			selectTableSQL = "SELECT R.restaurant_name, I.double_seat as Inside_double_seat, O.double_seat as Outside_double_seat "
 
-					+ "FROM Restaurant as R, Inside_seat_group as I, Outside_seat_group as O "
+					+ "FROM DBCOURSE_Restaurant as R, DBCOURSE_Inside_seat_group as I, DBCOURSE_Outside_seat_group as O "
 
 					+ "WHERE I.size=O.size and I.size=R.size and "
 
 					+ "R.restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Location "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 
 					+ "WHERE location = ?)";
 		}
@@ -469,12 +485,12 @@ public class RestaurantDBinput{
 		else if(seat == "Quad"){
 			selectTableSQL = "SELECT R.restaurant_name, I.quad_seat as Inside_quad_seat, O.quad_seat as Outside_quad_seat "
 
-					+ "FROM Restaurant as R, Inside_seat_group as I, Outside_seat_group as O "
+					+ "FROM DBCOURSE_Restaurant as R, DBCOURSE_Inside_seat_group as I, DBCOURSE_Outside_seat_group as O "
 
 					+ "WHERE I.size=O.size and I.size=R.size and "
 
 					+ "R.restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Location "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 
 					+ "WHERE location = ?)";
 		}
@@ -486,6 +502,14 @@ public class RestaurantDBinput{
 
 			dbConnection = dbdb.getDBConnection();
 
+
+
+
+
+
+
+
+
 			stmt = dbConnection.createStatement();
 
 			//use database
@@ -494,9 +518,19 @@ public class RestaurantDBinput{
 
 			stmt.executeUpdate(UseSQL);
 
-			System.out.println("USE DATABASE done…");
+			//System.out.println("USE DATABASE done…");
+
+
+
+
+
+
+
+
 
 			dbConnection.setAutoCommit(false);
+
+
 
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 
@@ -511,8 +545,8 @@ public class RestaurantDBinput{
 				if(seat=="Single"){
 
 					availableSeat.add(new AvailableSeat(rs.getString("restaurant_name"),
-							rs.getInt("Seat_available.inside_single_seat"),
-							rs.getInt("Seat_available.outside_single_seat")));
+							rs.getInt("inside_single_seat"),
+							rs.getInt("outside_single_seat")));
 				}
 				else if(seat=="Double"){
 					availableSeat.add(new AvailableSeat(rs.getString("restaurant_name"),
@@ -562,47 +596,47 @@ public class RestaurantDBinput{
 		String category="";
 
 		while(true){
-			//System.out.println("Which food’s category do you want to find?");
-			System.out.println("1.Korean  2.Chinese 3.Japanese 4.Indian 5.Fastfood 6.Western (enter 1~6)");
+			//System.out.println("Choose the category of the restaurant");
+			System.out.println("1.Korean  2.Chinese 3.Japanese 4.Indian 5.Fastfood 6.Western (Insert 1~6)");
 			categoryNum =scanner.nextInt();
 
 			if(categoryNum==1){
-				System.out.println("You select Korean.\n");
+				System.out.println("You selected Korean.\n");
 				category="Korean";
 				break;
 			}
 
 			else if(categoryNum==2){
-				System.out.println("You select Chinese.\n");
+				System.out.println("You selected Chinese.\n");
 				category="Chinese";
 				break;
 			}
 
 			else if(categoryNum==3){
-				System.out.println("You select Japanese.\n");
+				System.out.println("You selected Japanese.\n");
 				category="Japanese";
 				break;
 			}
 			else if(categoryNum==4){
-				System.out.println("You select Indian.\n");
+				System.out.println("You selected Indian.\n");
 				category="Indian";
 				break;
 			}
 
 			else if(categoryNum==5){
-				System.out.println("You select Fastfood.\n");
+				System.out.println("You selected Fastfood.\n");
 				category="Fastfood";
 				break;
 			}
 			else if(categoryNum==6){
-				System.out.println("You select Western.\n");
+				System.out.println("You selected Western.\n");
 				category="Western";
 				break;
 			}
 
 
 			else
-				System.out.println("<Warning> insert 1~6 again.\n");
+				System.out.println("<Warning> Insert 1~6 again.\n");
 		}
 
 		return category;
@@ -615,41 +649,45 @@ public class RestaurantDBinput{
 		String payment="";
 
 		while(true){
-			System.out.println("Choose a way of discount: ");
-			System.out.println(“1. Coupon only  2. Tele_discount only 3. Coupon&tele_discount 4. None (enter 1~4)");
+			System.out.println("Choose the payment service ");
+			System.out.println("1.coupon only  2. tele_discount only 3.coupon&tele_discount 4.None (Insert 1~4)");
 			paymentNum =scanner.nextInt();
 
 			if(paymentNum==1){
-				System.out.println("You select coupon only.\n");
+				System.out.println("You selected coupon only.\n");
 				payment="coupon";
 				break;
 			}
 
 			else if(paymentNum==2){
-				System.out.println("You select tele_discount only.\n");
+				System.out.println("You selected tele_discount only.\n");
 				payment="tele_discount";
 				break;
 			}
 			else if(paymentNum==3){
-				System.out.println("You select coupon&tele_discount.\n");
+				System.out.println("You selected coupon&tele_discount.\n");
 				payment="coupon&tele_discount";
 				break;
 			}
 			else if(paymentNum==4){
-				System.out.println("You select None.\n");
+				System.out.println("You selected None.\n");
 				payment="None";
 				break;
 			}
 			else
-				System.out.println("<Warning> insert 1~4 again.\n");
+				System.out.println("<Warning> Insert 1~4 again.\n");
 		}//while문 끝
 
 		ArrayList<String>names=getRestaurantByPayment(category,payment);
 
-		//System.out.println("Restaurants which offer "+payment+"discount: ");
-
+		System.out.println("Restaurants which offer "+payment+" discount:");
+		System.out.println("[Restaurant name]");
+		
 		for (int i = 0; i < names.size(); i++) {
-			System.out.println(names.get(i));
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
+				System.out.println(names.get(i));
 		}//for ends
 	}//getPayment method ends!
 
@@ -659,7 +697,7 @@ public class RestaurantDBinput{
 		ResultSet rs = null;
 		ArrayList<String> restaurant_name = new ArrayList<String>();
 
-		//지원
+	
 		Statement stmt = null;
 
 
@@ -667,10 +705,10 @@ public class RestaurantDBinput{
 		String selectTableSQL="";
 		if(payment=="coupon"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Payment "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Payment "
 					+ "WHERE coupon='Y' AND tele_discount='N' AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Company "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 					+ "WHERE category = ?)";
 
 		}
@@ -678,10 +716,10 @@ public class RestaurantDBinput{
 
 		else if(payment=="tele_discount"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Payment "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Payment "
 					+ "WHERE coupon='N' AND tele_discount='Y' AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Company "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 					+ "WHERE category = ?)";
 
 
@@ -689,10 +727,10 @@ public class RestaurantDBinput{
 
 		else if(payment=="coupon&tele_discount"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Payment "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Payment "
 					+ "WHERE coupon='Y' AND tele_discount='Y' AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Company "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 					+ "WHERE category = ?)";
 
 
@@ -700,10 +738,10 @@ public class RestaurantDBinput{
 
 		else if(payment=="None"){
 			selectTableSQL = "SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Payment "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Payment "
 					+ "WHERE coupon='N' AND tele_discount='N' AND "
 					+ "restaurant_name IN ( SELECT restaurant_name "
-					+ "FROM Restaurant NATURAL JOIN Company "
+					+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 					+ "WHERE category = ?)";
 
 
@@ -715,7 +753,7 @@ public class RestaurantDBinput{
 
 
 
-			//지원
+			
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
@@ -753,9 +791,9 @@ public class RestaurantDBinput{
 
 		while(true){
 
-			System.out.println("\nChoose the price: ");
+			System.out.println("\nChoose the price range");
 
-			System.out.println("1. Less than 10000 2. Greater than 10000 (enter 1 or 2)");
+			System.out.println("1. under 10000won 2. over 10000won (Insert 1 or 2)");
 
 			priceNum =scanner.nextInt();
 
@@ -763,7 +801,7 @@ public class RestaurantDBinput{
 
 			if(priceNum==1){
 
-				System.out.println("You select less than 10000.\n");
+				System.out.println("You selected under 10000won.\n");
 
 				price="up";
 
@@ -775,7 +813,7 @@ public class RestaurantDBinput{
 
 			else if(priceNum==2){
 
-				System.out.println("You select greater than 10000.\n");
+				System.out.println("You selected over 10000won.\n");
 
 				price="down";
 
@@ -787,7 +825,7 @@ public class RestaurantDBinput{
 
 			else
 
-				System.out.println("<Warning> insert 1 or 2 again.");
+				System.out.println("<Warning> Insert 1 or 2 again.");
 
 		}
 
@@ -796,10 +834,14 @@ public class RestaurantDBinput{
 
 
 		ArrayList<PrintMenuName> names = getCategoryByPrice(category, price);
+		System.out.println("[Restaurant name]	[Menu name]");
 
 
 
 		for (int i = 0; i < names.size(); i++) {
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
 
 			System.out.println(names.get(i).toString());
 
@@ -829,26 +871,26 @@ public class RestaurantDBinput{
 		if(price=="up"){
 			selectTableSQL = "SELECT restaurant_name, menu_name "
 
-			+ "FROM Restaurant NATURAL JOIN Menu "
+			+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Menu "
 
 			+ "WHERE price <= 10000 AND "
 
 			+ "restaurant_name IN ( SELECT restaurant_name "
 
-			+ "FROM Restaurant NATURAL JOIN Company "
+			+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 			+ "WHERE category = ?)";
 		}
 
 		else if(price== "down"){
 			selectTableSQL = "SELECT restaurant_name, menu_name "
 
-			+ "FROM Restaurant NATURAL JOIN Menu "
+			+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Menu "
 
-			+ "WHERE price >= 10000 AND "
+			+ "WHERE price > 10000 AND "
 
 			+ "restaurant_name IN ( SELECT restaurant_name "
 
-			+ "FROM Restaurant NATURAL JOIN Company "
+			+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 			+ "WHERE category = ?)";
 		}
 
@@ -875,7 +917,7 @@ public class RestaurantDBinput{
 
 			stmt.executeUpdate(UseSQL);
 
-			System.out.println("USE DATABASE done...");
+			//System.out.println("USE DATABASE done...");
 
 
 
@@ -892,6 +934,10 @@ public class RestaurantDBinput{
 			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
 
 			preparedStatementSelect.setString(1, category);
+
+
+
+
 
 			rs = preparedStatementSelect.executeQuery();
 
@@ -939,10 +985,10 @@ public class RestaurantDBinput{
 
 		//while start(get input until correct input is entered)
 		while(true){
-			System.out.println("\nInput age (among 10, 20, 30, 40): ");
+			System.out.println("\nChoose age(among 10, 20, 30, 40): ");
 
 			age = scanner.nextInt();
-			System.out.println("Input gender (among F or M): ");
+			System.out.println("Choose gender(among F or M): ");
 			gender = scanner.next();
 
 			//제대로된 input일 경우 loop 나감
@@ -952,7 +998,7 @@ public class RestaurantDBinput{
 			}
 
 			else
-				System.out.println("<Warning> enter age among 10, 20, 30, 40 and gender among M, F");
+				System.out.println("<Warning> Insert age among 10, 20, 30, 40 and gender among M, F");
 
 		}
 
@@ -964,17 +1010,20 @@ public class RestaurantDBinput{
 		//성별을 완성된 단어로 저장하는 string
 		String genderLetter;
 		if(gender.equals("M")){
-			genderLetter="Man";               
+			genderLetter="Male";               
 		}
 		else
 			genderLetter="Female";
 
-		System.out.println(“Restaurants which people who is near "+age+" or "+genderLetter+" like : ");
+		System.out.println(age+" OR "+genderLetter+" is the major_client of these restaurant: ");
 		System.out.println("[Restaurant name]	[Age]	[Gender]");
 
 
 
 		for (int i = 0; i < names.size(); i++) {
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
 			System.out.println(names.get(i));
 		}//for ends
 
@@ -996,17 +1045,17 @@ public class RestaurantDBinput{
 		String selectTableSQL="";
 
 		selectTableSQL = "(SELECT restaurant_name, age, gender "
-				+ "FROM Restaurant NATURAL JOIN Major_client "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Major_client "
 				+ "WHERE age = ? AND "
 				+ "restaurant_name IN ( SELECT restaurant_name "
-				+ "FROM Restaurant NATURAL JOIN Location "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 				+ "WHERE location=? )) "
 				+ "UNION "
 				+ "(SELECT restaurant_name, age, gender "
-				+ "FROM Restaurant NATURAL JOIN Major_client "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Major_client "
 				+ "WHERE gender = ? AND "
 				+ "restaurant_name IN ( SELECT restaurant_name "
-				+ "FROM Restaurant NATURAL JOIN Location "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Location "
 				+ "WHERE location = ? ))";
 
 
@@ -1017,7 +1066,7 @@ public class RestaurantDBinput{
 
 
 
-			//지원
+			
 			stmt = dbConnection.createStatement();
 			//use database
 			String UseSQL = "USE RestaurantDB";
@@ -1081,7 +1130,7 @@ public class RestaurantDBinput{
 		//while start(get input until correct input is entered)
 		while(true){
 			//알콜음료 선택
-			System.out.println("\nChoose alcohol beverages do you want: (enter 1~7)”);
+			System.out.println("\nChoose alcohol drink you want (Insert the number)");
 			System.out.println("1. Makgeolli");
 			System.out.println("2. Japanese_Rice_Wine");
 			System.out.println("3. Whiskey");
@@ -1094,7 +1143,7 @@ public class RestaurantDBinput{
 			if(alcoholNum>=1&&alcoholNum<=7)
 				break;
 			else
-				System.out.println("<Warning> enter integer from 1 to 7");
+				System.out.println("<Warning> Insert from 1 ~ 7");
 
 		}
 
@@ -1102,7 +1151,7 @@ public class RestaurantDBinput{
 		//while2 starts
 		while(true){
 			//무알콜음료 선택
-			System.out.println("\nChoose non-alcohol beverage do you want: (enter 1~7)”);
+			System.out.println("\nChoose nonalcohol drink you want (Insert the number)");
 			System.out.println("1. Ssanghwa_tea");
 			System.out.println("2. Green_tea");
 			System.out.println("3. Lassi");
@@ -1116,7 +1165,7 @@ public class RestaurantDBinput{
 			if(non_alcoholNum>=1&&non_alcoholNum<=7)
 				break;
 			else
-				System.out.println("<Warning> enter integer from 1 to 7");
+				System.out.println("<Warning>Insert 1~7 again");
 
 		} //while ends
 
@@ -1182,19 +1231,20 @@ public class RestaurantDBinput{
 
 
 
-		System.out.println("Restaurant which has alcohol beverage "+alcohol+" or non-alcohol beverage  "+non_alcohol+" : ");
+		System.out.println("Alcohol drink "+alcohol+" or Nonalcohol drink "+non_alcohol+" is offered in these restaurant");
 		System.out.println("[Restaurant name]	[alcohol]		[non_alcohol]");
 
 		ArrayList<DrinkName> names =  getDrinkName(category, alcohol, non_alcohol);
 
-		//성별을 완성된 단어로 저장하는 string
-
-
+		
 
 
 
 
 		for (int i = 0; i < names.size(); i++) {
+			if(names.size()==0)
+				System.out.println("NONE");
+			else
 			System.out.println(names.get(i));
 		}//for ends
 	}//getDrink method ends
@@ -1211,7 +1261,7 @@ public class RestaurantDBinput{
 		ResultSet rs = null;
 		ArrayList<DrinkName> drinkname = new ArrayList<DrinkName>();
 
-		//지원
+		
 		Statement stmt = null;
 
 
@@ -1219,17 +1269,17 @@ public class RestaurantDBinput{
 		String selectTableSQL="";
 
 		selectTableSQL = "(SELECT restaurant_name, alcohol_drink, nonalcohol_drink "
-				+ "FROM Restaurant NATURAL JOIN Beverage "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Beverage "
 				+ "WHERE alcohol_drink = ? AND "
 				+ "restaurant_name IN ( SELECT restaurant_name "
-				+ "FROM Restaurant NATURAL JOIN Company "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 				+ "WHERE category = ? )) "
 				+ "UNION "
 				+ "(SELECT restaurant_name, alcohol_drink, nonalcohol_drink "
-				+ "FROM Restaurant NATURAL JOIN Beverage "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Beverage "
 				+ "WHERE nonalcohol_drink = ? AND "
 				+ "restaurant_name  IN ( SELECT restaurant_name "
-				+ "FROM Restaurant NATURAL JOIN Company "
+				+ "FROM DBCOURSE_Restaurant NATURAL JOIN DBCOURSE_Company "
 				+ "WHERE category = ? )) ";
 		//쿼리입력
 
@@ -1290,22 +1340,26 @@ public class RestaurantDBinput{
 		int salty=0;
 		int sourness=0;
 
-		System.out.println("\nPick menu that you want to modify evaluation: ");
+		System.out.println("\nChoose the menu you want to edit");
 		menuName = scanner.next();
 
-		System.out.println("\n You choose "+ menuName);
+		System.out.println("\n you choose "+ menuName);
 
-		System.out.println("Input the grade (0~5)");
+		System.out.println("Insert the score (0~5)");
 		System.out.print("Spicy: ");
 		spicy = scanner.nextInt();
-		System.out.print(" Sweetness: ");
+		System.out.print("Sweetness: ");
 		sweetness = scanner.nextInt();
 
-		System.out.print(" salty: ");
+		System.out.print("salty: ");
 		salty = scanner.nextInt();
 
-		System.out.print(" Sourness: ");
+		System.out.print("Sourness: ");
 		sourness = scanner.nextInt();
+
+
+
+
 
 
 		getEditMenuEvalByMenu(menuName,spicy,sweetness,salty,sourness);
@@ -1320,7 +1374,7 @@ public class RestaurantDBinput{
 			PreparedStatement preparedStatementUpdate = null;
 
 			Statement stmt = null;
-			String updateTableSQL = "UPDATE Menu_evaluation set spicy = ?, sweetness = ?, salty = ?, sourness = ? where menu_name = ?";
+			String updateTableSQL = "UPDATE DBCOURSE_Menu_evaluation set spicy = ?, sweetness = ?, salty = ?, sourness = ? where menu_name = ?";
 
 			try {
 				dbConnection = dbdb.getDBConnection();
@@ -1360,13 +1414,77 @@ public class RestaurantDBinput{
 			}
 			
 			}//getEditMenuEvalByMenu ends
+
+	public void getUpdate() throws SQLException {
+
+		ArrayList<PrintUpdate> names = getUpdateByEdit();
+
+		for (int i = 0; i < names.size(); i++) {
+			System.out.println(names.get(i));
+		}//for ends
+
+	}//getPrice ends
+
+	public static ArrayList<PrintUpdate> getUpdateByEdit() throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatementSelect = null;
+		ResultSet rs = null;
+		ArrayList<PrintUpdate> update = new ArrayList<PrintUpdate>();
+		Statement stmt = null;
+
+
+		String selectTableSQL = "";
+
+		selectTableSQL = "SELECT restaurant_name, menu_name, spicy, sweetness, salty, sourness "
+				+ "FROM DBCOURSE_Menu_evaluation ";
+
+
+		try {
+			dbConnection = dbdb.getDBConnection();
+
+
+
+
+			stmt = dbConnection.createStatement();
+			//use database
+			String UseSQL = "USE RestaurantDB";
+			stmt.executeUpdate(UseSQL);
+			//System.out.println("USE DATABASE done...");
+
+
+
+
+			dbConnection.setAutoCommit(false);
+
+			preparedStatementSelect = dbConnection.prepareStatement(selectTableSQL);
+			//	preparedStatementSelect.setInt(1, category);
+
+
+			rs = preparedStatementSelect.executeQuery();
+
+			while (rs.next()) {
+				update.add(new PrintUpdate(rs.getString("restaurant_name"), rs.getInt("spicy"), rs.getInt("sweetness"), rs.getInt("salty"), rs.getInt("sourness")));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+			dbConnection.rollback();
+		} finally {
+			if (preparedStatementSelect != null)
+				preparedStatementSelect.close();
+			if (dbConnection != null)
+				dbConnection.close();
+		}
+
+		return update;
+	}
 	
 	/*
 	    * 삭제할 식당의 이름을 받는 메소드
 	    * 입력값을 deleteRestaurant로 넘겨준다
 	    */
 	   public void getNameForDelete() throws SQLException{
-	      System.out.println("Pick restaurant which do you want to delete: ");
+	      System.out.println("enter restaurant name to delete");
 	      String nameToDelete=scanner.next();
 
 	      deleteRestaurant(nameToDelete);
@@ -1380,12 +1498,12 @@ public class RestaurantDBinput{
 	    * 파라미터로 받은 식당이름을 식당 테이블에서 삭제하는 메소드
 	    */
 	   public void deleteRestaurant(String name) throws SQLException{
-	      RestaurantDB dbdb = new RestaurantDB();
+	      Test dbdb = new Test();
 	      PreparedStatement preparedStatementDelete = null;
 	      Connection dbConnection=null;
 	      Statement stmt = null;
 
-	      String createStmt="DELETE from restaurant WHERE restaurant_name= ? ";
+	      String createStmt="DELETE from DBCOURSE_Restaurant WHERE restaurant_name= ? ";
 	      try{
 
 	         dbConnection=dbdb.getDBConnection();
@@ -1402,7 +1520,7 @@ public class RestaurantDBinput{
 	         preparedStatementDelete.setString(1, name);
 
 	         preparedStatementDelete.executeUpdate(); 
-	         System.out.println("Restaurant "+name+" is deleted.");
+	         System.out.println("restaurant "+name+" is deleted.");
 
 	      }
 
@@ -1435,12 +1553,12 @@ public class RestaurantDBinput{
 	    * delivery location 추가하는 메소드
 	    */
 	   public void insertintoDeliveryLocation(String location, String delivery_location) throws SQLException{
-	      RestaurantDB dbdb = new RestaurantDB();
+	      Test dbdb = new Test();
 	      PreparedStatement preparedStatementInsert = null;
 	      Connection dbConnection=null;
 	      Statement stmt = null;
 
-	      String insertStmt="INSERT INTO Delivery_location (location, delivery_location) values (?,?) ";
+	      String insertStmt="INSERT INTO DBCOURSE_Delivery_location (location, delivery_location) values (?,?) ";
 	      try{
 
 	         dbConnection=dbdb.getDBConnection();
@@ -1463,12 +1581,13 @@ public class RestaurantDBinput{
 	      }
 
 	      catch(SQLException excp){
-	         System.out.println("error in deletion");
+	         System.out.println("Error in deletion");
 	      }
 
 
 
 	   }//insert delivery location ends
 }//RestaurantDBinput class endS!
+
 
 
